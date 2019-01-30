@@ -12,3 +12,5 @@ Convert CSV to json online - https://www.csvjson.com/csv2json
 
 ## Libraries
 Define json schema in python using the jsonobject library - https://github.com/dimagi/jsonobject - pip install jsonobject
+
+Using pickle for object serializarion and deserialization - https://www.thepythoncorner.com/2016/12/object-serialization-in-python/?doing_wp_cron=1548868317.1566569805145263671875
