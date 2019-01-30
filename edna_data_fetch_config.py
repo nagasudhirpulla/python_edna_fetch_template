@@ -12,6 +12,16 @@ class EdnaFetchConfig:
     time_format_str = ""
     destination = ""
     file_format = "csv"
-
-a = EdnaFetchConfig()
-print(a)
+    def getDict(self):
+        return{
+            'name':self.name,
+            'meas_list':[meas.getDict() for meas in self.meas_list],
+            'from_time': self.from_time.getDict(),
+            'to_time': self.to_time.getDict(),
+            'sampling_time_secs': self.sampling_time_secs,
+            'sampling_strategy': self.sampling_strategy,
+            'is_time_at_end': self.is_time_at_end,
+            'time_format_str': self.time_format_str,
+            'destination': self.destination,
+            'file_format': self.file_format
+        }
