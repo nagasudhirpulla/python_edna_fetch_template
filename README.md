@@ -11,4 +11,4 @@ Python datetime format strings reference  - http://strftime.org/
 Convert CSV to json online - https://www.csvjson.com/csv2json
 
 ## Libraries
-Define json schema in python using the jsonobject library - https://github.com/dimagi/jsonobject
+Define json schema in python using the jsonobject library - https://github.com/dimagi/jsonobject - conda install -c auto jsonobject
