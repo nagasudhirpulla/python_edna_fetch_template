@@ -11,4 +11,3 @@ print(b)
 
 c = EdnaFetchConfig()
 c = c.fromDict(json.loads(b))
-

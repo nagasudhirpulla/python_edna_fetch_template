@@ -61,4 +61,3 @@ class EdnaFetchConfig:
         if 'file_format' in keys:
             configObj.file_format = dictObj['file_format']
         return configObj
-        
