@@ -1,5 +1,6 @@
 import json
 
+
 class EdnaFetchConfigEncoder(json.JSONEncoder):
     def default(self, obj):
         if type(obj).__name__ == 'EdnaFetchConfig':

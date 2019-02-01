@@ -13,6 +13,7 @@ class VariableTime:
     is_hours_variable = True
     is_mins_variable = True
     is_secs_variable = True
+
     def getDict(self):
         return {
             'abs_time': self.abs_time,
