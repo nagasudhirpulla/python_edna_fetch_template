@@ -1,3 +1,6 @@
+import datetime as dt
+
+
 class VariableTime:
     abs_time = ""
     abs_time_format = ""
@@ -64,3 +67,7 @@ class VariableTime:
         if 'is_secs_variable'in keys:
             configObj.is_secs_variable = dictObj['is_secs_variable']
         return configObj
+
+    def getTime(self):
+        # todo complete this
+        return self.abs_time
