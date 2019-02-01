@@ -5,6 +5,10 @@ import json
 a = EdnaFetchConfig()
 print(a)
 
-b = json.dumps(a, cls=EdnaFetchConfigEncoder)
+b = json.dumps(a.getDict())
 
 print(b)
+
+c = EdnaFetchConfig()
+c = c.fromDict(json.loads(b))
+
