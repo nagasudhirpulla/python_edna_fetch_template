@@ -13,6 +13,9 @@ Convert CSV to json online - https://www.csvjson.com/csv2json
 Add years to python datetime - https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-16.php
 
 
+Convert list of dictionaries to csv https://stackoverflow.com/questions/3086973/how-do-i-convert-this-list-of-dictionaries-to-a-csv-file
+
+
 ## Libraries
 Define json schema in python using the jsonobject library - https://github.com/dimagi/jsonobject - pip install jsonobject
 
