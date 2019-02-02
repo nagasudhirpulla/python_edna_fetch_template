@@ -10,6 +10,9 @@ Python datetime format strings reference  - http://strftime.org/
 
 Convert CSV to json online - https://www.csvjson.com/csv2json
 
+Add years to python datetime - https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-16.php
+
+
 ## Libraries
 Define json schema in python using the jsonobject library - https://github.com/dimagi/jsonobject - pip install jsonobject
 

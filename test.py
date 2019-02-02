@@ -10,7 +10,7 @@ print(a)
 
 b = json.dumps(a.getDict())
 
-print(b)
+# print(b)
 
 c = EdnaFetchConfig()
 c = c.fromDict(json.loads(b))
@@ -18,10 +18,12 @@ c = c.fromDict(json.loads(b))
 res = EdnaResult()
 resStr = json.dumps(res.getDict())
 res2 = json.loads(resStr)
-print(resStr)
+# print(resStr)
 
 a.from_time.abs_time = dt.datetime.now()-dt.timedelta(minutes=10)
 a.to_time.abs_time = dt.datetime.now()-dt.timedelta(minutes=5)
+a.from_time.mins_offset = -10
+a.to_time.mins_offset = -5
 
 resList = fetchDataTest(a)
-print([res.getDict() for res in resList])
+resDictList = [res.getDict() for res in resList]

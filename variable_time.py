@@ -1,4 +1,24 @@
 import datetime as dt
+from datetime import date
+import calendar
+
+
+def addYears(d, years):
+    try:
+        # Return same day of the current year
+        # https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-16.php
+        return d.replace(year=d.year + years)
+    except ValueError:
+        # If not same day, it will return other, i.e.  February 29 to March 1 etc.
+        return d + (dt.datetime(d.year + years, 1, 1) - dt.datetime(d.year, 1, 1))
+
+
+def addMonths(sourcedate, months):
+    month = sourcedate.month - 1 + months
+    year = sourcedate.year + month // 12
+    month = month % 12 + 1
+    day = min(sourcedate.day, calendar.monthrange(year, month)[1])
+    return dt.datetime(year, month, day, sourcedate.hour, sourcedate.minute, sourcedate.second)
 
 
 class VariableTime:
@@ -69,5 +89,35 @@ class VariableTime:
         return configObj
 
     def getTime(self):
-        # todo complete this
-        return self.abs_time
+        abs_time = self.abs_time
+        res_time = dt.datetime.now()
+        res_time = res_time.replace(microsecond=0)
+        if self.is_years_variable == True:
+            res_time = addYears(res_time, self.years_offset)
+        if self.is_months_variable == True:
+            res_time = addMonths(res_time, self.months_offset)
+        if self.is_days_variable == True:
+            res_time = res_time + dt.timedelta(days=self.days_offset)
+        if self.is_hours_variable == True:
+            res_time = res_time + dt.timedelta(minutes=self.hours_offset*60)
+        if self.is_mins_variable == True:
+            res_time = res_time + dt.timedelta(minutes=self.mins_offset)
+        if self.is_secs_variable == True:
+            res_time = res_time + dt.timedelta(seconds=self.secs_offset)
+        if self.is_years_variable != True:
+            res_time = addYears(res_time, abs_time.year - res_time.year)
+        if self.is_months_variable != True:
+            res_time = addMonths(res_time, abs_time.month - res_time.month)
+        if self.is_days_variable != True:
+            res_time = res_time + \
+                dt.timedelta(days=abs_time.day - res_time.day)
+        if self.is_hours_variable != True:
+            res_time = res_time + \
+                dt.timedelta(hours=abs_time.hour - res_time.hour)
+        if self.is_mins_variable != True:
+            res_time = res_time + \
+                dt.timedelta(minutes=abs_time.minute - res_time.minute)
+        if self.is_secs_variable != True:
+            res_time = res_time + \
+                dt.timedelta(seconds=abs_time.second - res_time.second)
+        return res_time
