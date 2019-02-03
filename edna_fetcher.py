@@ -6,21 +6,32 @@ import math
 import csv
 import os
 import xlsxwriter
+import numpy as np
+import pandas as pd
+
+from pandas import ExcelWriter
 
 
 def fetchDataTest(fetchConfig):
     from_time = fetchConfig.from_time.getTime()
     to_time = fetchConfig.to_time.getTime()
-    resList = []
-    for iter in range(int((to_time-from_time).total_seconds()/60)):
-        res = EdnaResult()
-        res.val = iter
-        res.time = from_time + dt.timedelta(minutes=iter)
-        resList.append(res)
-    return resList
+    resObj = {}
+    # initializing the result object
+    for meas in fetchConfig.meas_list:
+        resObj[meas.name] = []
+
+    for meas in fetchConfig.meas_list:
+        resList = []
+        for iter in range(int((to_time-from_time).total_seconds()/60)):
+            res = EdnaResult()
+            res.val = iter
+            res.time = from_time + dt.timedelta(minutes=iter)
+            resList.append(res)
+        resObj[meas.name] = resList
+    return resObj
 
 
-def saveDictsToFile(fetchConfig, dictList):
+def getDumpFileName(fetchConfig):
     # decide file format
     fileFormat = fetchConfig.file_format
 
@@ -43,41 +54,36 @@ def saveDictsToFile(fetchConfig, dictList):
 
     # derive the filename
     fileName = fetchConfig.name + timeSuffixStr
-    keys = list(dictList[0].keys())
-
-    # if keys have a key 'time' bring to the first
-    if 'time' in keys:
-        keys.remove('time')
-        keys.insert(0, 'time')
 
     # derive the full filename
     fullFileName = os.path.join(destFolder, fileName + "." + fileFormat)
+    return fullFileName
+
+
+def getDFFromResObj(resObj):
+    # get all the keys of the resObj and initialize a dataframe
+    measNames = list(resObj.keys())
+    # initialize the result DataFrame
+    resDf = pd.DataFrame(columns=measNames)
+    for measName in measNames:
+        measDataObjs = resObj[measName]
+        # convert this list of edna results to pandas series
+        seriesObj = {}
+        for dataObj in measDataObjs:
+            seriesObj[dataObj.time] = dataObj.val
+        measSeries = pd.Series(seriesObj)
+        resDf[measName] = measSeries
+    resDf.index.name = 'time'
+    return resDf
+
+
+def saveDfToFile(fetchConfig, df):
+    fileName = getDumpFileName(fetchConfig)
 
     # dump the file
-    if fileFormat == 'xlsx':
-        workbook = xlsxwriter.Workbook(fullFileName)
-        worksheet = workbook.add_worksheet()
-        row = 0
-        col = 0
-        i = 0
-
-        # dump keys
-        for key in keys:
-            worksheet.write(row, col + i, key)
-            i += 1
-        row += 1
-
-        # dump data
-        for dictObj in dictList:
-            i = 0
-            for key in keys:
-                item = dictObj[key]
-                worksheet.write(row, col + i, item)
-                i += 1
-            row += 1
-        workbook.close()
+    if fileName.endswith('xlsx'):
+        writer = ExcelWriter(fileName)
+        df.to_excel(writer)
+        writer.save()
     else:
-        with open(fullFileName, 'w', newline='') as output_file:
-            dict_writer = csv.DictWriter(output_file, keys)
-            dict_writer.writeheader()
-            dict_writer.writerows(dictList)
+        df.to_csv(fileName, sep=',')
