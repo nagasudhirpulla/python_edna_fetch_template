@@ -10,6 +10,7 @@ a.name = "template_name"
 a.is_time_at_end = True
 a.time_format_str = "_%Y_%m_%d"
 a.destination = 'C:\\Users\\Nagasudhir\\Documents'
+a.file_format = 'xlsx'
 print(a)
 
 b = json.dumps(a.getDict())

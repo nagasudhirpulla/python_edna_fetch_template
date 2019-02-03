@@ -15,6 +15,8 @@ Add years to python datetime - https://www.w3resource.com/python-exercises/date-
 
 Convert list of dictionaries to csv https://stackoverflow.com/questions/3086973/how-do-i-convert-this-list-of-dictionaries-to-a-csv-file
 
+Convert list of dictionaries to xlsx https://stackoverflow.com/questions/39848392/how-to-dump-a-dictionary-into-an-xlsx-file-with-proper-column-alignment/39849172
+
 
 ## Libraries
 Define json schema in python using the jsonobject library - https://github.com/dimagi/jsonobject - pip install jsonobject

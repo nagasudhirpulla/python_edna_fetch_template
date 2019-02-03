@@ -5,6 +5,7 @@ import datetime as dt
 import math
 import csv
 import os
+import xlsxwriter
 
 
 def fetchDataTest(fetchConfig):
@@ -24,7 +25,7 @@ def saveDictsToFile(fetchConfig, dictList):
     fileFormat = fetchConfig.file_format
 
     def any_in(a, b): return bool(set(a).intersection(b))
-    if any_in(['csv', 'xlsx'], fileFormat) is not True:
+    if any_in(['csv', 'xlsx'], [fileFormat]) is not True:
         fileFormat = 'csv'
 
     # get destination folder
@@ -42,13 +43,41 @@ def saveDictsToFile(fetchConfig, dictList):
 
     # derive the filename
     fileName = fetchConfig.name + timeSuffixStr
-    keys = dictList[0].keys()
+    keys = list(dictList[0].keys())
+
+    # if keys have a key 'time' bring to the first
+    if 'time' in keys:
+        keys.remove('time')
+        keys.insert(0, 'time')
 
     # derive the full filename
     fullFileName = os.path.join(destFolder, fileName + "." + fileFormat)
 
     # dump the file
-    with open(fullFileName, 'w', newline='') as output_file:
-        dict_writer = csv.DictWriter(output_file, keys)
-        dict_writer.writeheader()
-        dict_writer.writerows(dictList)
+    if fileFormat == 'xlsx':
+        workbook = xlsxwriter.Workbook(fullFileName)
+        worksheet = workbook.add_worksheet()
+        row = 0
+        col = 0
+        i = 0
+
+        # dump keys
+        for key in keys:
+            worksheet.write(row, col + i, key)
+            i += 1
+        row += 1
+
+        # dump data
+        for dictObj in dictList:
+            i = 0
+            for key in keys:
+                item = dictObj[key]
+                worksheet.write(row, col + i, item)
+                i += 1
+            row += 1
+        workbook.close()
+    else:
+        with open(fullFileName, 'w', newline='') as output_file:
+            dict_writer = csv.DictWriter(output_file, keys)
+            dict_writer.writeheader()
+            dict_writer.writerows(dictList)

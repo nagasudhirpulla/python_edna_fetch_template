@@ -2,9 +2,9 @@ import datetime as dt
 
 
 class EdnaResult:
+    time = dt.datetime(1970, 1, 1, 0, 0, 0)
     val = None
     qual = "init"
-    time = dt.datetime(1970, 1, 1, 0, 0, 0)
 
     def getDict(self):
         return{
