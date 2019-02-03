@@ -3,9 +3,13 @@ from edna_data_fetch_config_encoder import EdnaFetchConfigEncoder
 from edna_result import EdnaResult
 import json
 import datetime as dt
-from edna_fetcher import fetchDataTest
+from edna_fetcher import fetchDataTest, saveDictsToFile
 
 a = EdnaFetchConfig()
+a.name = "template_name"
+a.is_time_at_end = True
+a.time_format_str = "_%Y_%m_%d"
+a.destination = 'C:\\Users\\Nagasudhir\\Documents'
 print(a)
 
 b = json.dumps(a.getDict())
@@ -27,3 +31,4 @@ a.to_time.mins_offset = -5
 
 resList = fetchDataTest(a)
 resDictList = [res.getDict() for res in resList]
+saveDictsToFile(a, resDictList)

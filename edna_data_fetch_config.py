@@ -10,7 +10,7 @@ class EdnaFetchConfig:
     sampling_time_secs = 60
     sampling_strategy = "snap"
     is_time_at_end = True
-    time_format_str = ""
+    time_format_str = "_%Y_%m_%d_%H_%M_%S"
     destination = ""
     file_format = "csv"
 
