@@ -27,7 +27,9 @@ class EdnaFetchConfig:
             "is_time_at_end": self.is_time_at_end,
             "time_format_str": self.time_format_str,
             "destination": self.destination,
-            "file_format": self.file_format
+            "file_format": self.file_format,
+            "host": self.host,
+            "port": self.port
         }
 
     def fromDict(self, dictObj):
@@ -62,4 +64,8 @@ class EdnaFetchConfig:
             configObj.destination = dictObj['destination']
         if 'file_format' in keys:
             configObj.file_format = dictObj['file_format']
+        if 'host' in keys:
+            configObj.host = dictObj['host']
+        if 'port' in keys:
+            configObj.port = dictObj['port']
         return configObj
