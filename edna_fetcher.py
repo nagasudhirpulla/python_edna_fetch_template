@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import requests
 import json
+from time_utils import convertTimeToReqStr
 
 from pandas import ExcelWriter
 
@@ -32,21 +33,32 @@ def fetchPntData(pnt, req_time):
     return data
 
 
-def fetchData(pnt, req_time):
-    req_date_str = req_time.strftime('%d/%m/%Y')
+def fetchData(fetchConfig):
+    from_time = fetchConfig.from_time.getTime()
+    to_time = fetchConfig.to_time.getTime()
+    from_time_str = convertTimeToReqStr(from_time)
+    to_time_str = convertTimeToReqStr(to_time)
+    meas_list = fetchConfig.meas_list
     # print(req_date_str)
-    params = dict(
-        pnt=pnt,
-        strtime="{0}/00:00:00".format(req_date_str),
-        endtime="{0}/{1}:{2}:00".format(req_date_str, makeTwoDigits(
-            req_time.hour), makeTwoDigits(req_time.minute)),
-        secs="300",
-        type="average"
-    )
-    r = requests.get(
-        url="http://wmrm0mc1:62448/api/values/history", params=params)
-    data = json.loads(r.text)
-    return data
+
+    # initializing the result object
+    resObj = {}
+    for meas in fetchConfig.meas_list:
+        resObj[meas.name] = []
+
+    for meas in fetchConfig.meas_list:
+        params = dict(
+            pnt=meas.edna_id,
+            strtime=from_time_str,
+            endtime=to_time_str,
+            secs=fetchConfig.sampling_time_secs,
+            type=fetchConfig.sampling_strategy
+        )
+        r = requests.get(
+            url="http://{0}:{1}/api/values/history".format(fetchConfig.host, fetchConfig.port), params=params)
+        data = json.loads(r.text)
+        resObj[meas.name] = data
+    return resObj
 
 
 def fetchDataTest(fetchConfig):
