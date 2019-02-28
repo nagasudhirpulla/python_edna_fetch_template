@@ -1,3 +1,4 @@
+
 from edna_result import EdnaResult
 from edna_data_fetch_config import EdnaFetchConfig
 from edna_meas import EdnaMeas
@@ -8,8 +9,27 @@ import os
 import xlsxwriter
 import numpy as np
 import pandas as pd
+import requests
+import json
 
 from pandas import ExcelWriter
+
+
+def fetchPntData(pnt, req_time):
+    req_date_str = req_time.strftime('%d/%m/%Y')
+    # print(req_date_str)
+    params = dict(
+        pnt=pnt,
+        strtime="{0}/00:00:00".format(req_date_str),
+        endtime="{0}/{1}:{2}:00".format(req_date_str, makeTwoDigits(
+            req_time.hour), makeTwoDigits(req_time.minute)),
+        secs="300",
+        type="average"
+    )
+    r = requests.get(
+        url="http://wmrm0mc1:62448/api/values/history", params=params)
+    data = json.loads(r.text)
+    return data
 
 
 def fetchDataTest(fetchConfig):
@@ -87,3 +107,9 @@ def saveDfToFile(fetchConfig, df):
         writer.save()
     else:
         df.to_csv(fileName, sep=',')
+
+
+def makeTwoDigits(num):
+    if(num < 10):
+        return "0"+str(num)
+    return num

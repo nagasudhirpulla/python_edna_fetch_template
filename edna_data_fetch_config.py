@@ -13,6 +13,8 @@ class EdnaFetchConfig:
     time_format_str = "_%Y_%m_%d_%H_%M_%S"
     destination = ""
     file_format = "csv"
+    host = "wmrm0mc1"
+    port = 86448
 
     def getDict(self):
         return{
